@@ -70,7 +70,7 @@ Our synthetic dataset pipeline consists of three main steps:
    Use [TotalSegmentator](https://github.com/wasserth/TotalSegmentator) on ImageCAS to segment structures (e.g., myocardium, aorta, heart).
 
 3. **Generate Synthetic NCCT Volumes**
-   Run the MATLAB script(will be released upon acceptance):
+   Run the MATLAB script (**will be released upon acceptance**):
 
    ```matlab
    data_engine.m
