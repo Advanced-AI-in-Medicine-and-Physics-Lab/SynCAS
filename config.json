@@ -1,0 +1,88 @@
+{
+    "plans_name": "CTA_finetune_baseline",
+    
+    "data_preprocessed":"datasets",
+    "dataset_name": "Dataset037_CTA",
+    "data_identifier": "nnUNetPlans_3d_fullres",
+    
+    "exp_results":"/Results_SynCAS",
+
+    "preprocessor_name": "DefaultPreprocessor",
+
+    "evaluation_folder":"datasets/Validation",
+    "num_anchor": 512,
+    "pos_per_anchor": 1,
+    "neg_per_anchor":5,
+    "pseudo_neg_per_anchor": 1,
+    "test_every":2,
+    "num_training_samples": 950,
+
+    "alpha": 0.9,
+    "temperature": 0.3,
+
+    "branch_aware": 1,
+    
+    "encoder": "resnet34_3D",
+    "score_name":"score_volume",
+    
+    "annotated_classes_key": [0,1],
+    "foreground_labels":[1],
+
+    "loss_weight":"no",
+
+    
+
+    "augmentated": 1,
+
+    "regression": 0,
+
+    "batch_size": 4,
+
+    "initial_lr": 1e-3,
+    "weight_decay": 3e-5, 
+    "oversample_foreground_percent": 0.33,
+    "num_iterations_per_epoch": 40,
+    "num_val_iterations_per_epoch": 10,
+    "num_epochs": 100,
+
+    
+    "max": 1156.018310546875,
+    "mean": 117.8508529663086,
+    "median": 35.021488189697266,
+    "min": -838.0132446289062,
+    "percentile_00_5": -159.008544921875,
+    "percentile_99_5": 992.98291015625,
+    "std": 234.8607177734375,
+
+
+    
+    "patch_size": [
+                32,
+                224,
+                224
+            ],
+
+    "initial_patch_size":[
+        92, 
+        512, 
+        512
+    ],
+
+    "transpose_forward": [
+        0,
+        1,
+        2
+    ],
+    "transpose_backward": [
+        0,
+        1,
+        2
+    ],
+    
+    
+    "spacing": [
+                 3,
+                0.349609375,
+                0.349609375
+            ]
+}
