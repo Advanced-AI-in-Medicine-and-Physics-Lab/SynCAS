@@ -319,6 +319,37 @@ def compute_tp_fp_fn_tn(mask_ref: np.ndarray, mask_pred: np.ndarray, ignore_mask
     tn = np.sum(((~mask_ref) & (~mask_pred)) & use_mask)
     return tp, fp, fn, tn
 
+# def compute_metrics(reference_file: str, prediction_file: str, image_reader_writer: SimpleITKIO,
+#                     labels_or_regions: Union[List[int], List[Union[int, Tuple[int, ...]]]],
+#                     ignore_label: int = None) -> dict:
+#     # load images
+#     seg_ref, seg_ref_dict = image_reader_writer.read_seg(reference_file)
+#     seg_pred, seg_pred_dict = image_reader_writer.read_seg(prediction_file)
+
+#     ignore_mask = seg_ref == ignore_label if ignore_label is not None else None
+
+#     results = {}
+#     results['reference_file'] = reference_file
+#     results['prediction_file'] = prediction_file
+#     results['metrics'] = {}
+#     for r in labels_or_regions:
+#         results['metrics'][r] = {}
+#         mask_ref = region_or_label_to_mask(seg_ref, r)
+#         mask_pred = region_or_label_to_mask(seg_pred, r)
+#         tp, fp, fn, tn = compute_tp_fp_fn_tn(mask_ref, mask_pred, ignore_mask)
+#         if tp + fp + fn == 0:
+#             results['metrics'][r]['Dice'] = np.nan
+#             results['metrics'][r]['IoU'] = np.nan
+#         else:
+#             results['metrics'][r]['Dice'] = 2 * tp / (2 * tp + fp + fn)
+#             results['metrics'][r]['IoU'] = tp / (tp + fp + fn)
+#         results['metrics'][r]['FP'] = fp
+#         results['metrics'][r]['TP'] = tp
+#         results['metrics'][r]['FN'] = fn
+#         results['metrics'][r]['TN'] = tn
+#         results['metrics'][r]['n_pred'] = fp + tp
+#         results['metrics'][r]['n_ref'] = fn + tp
+#     return results
 
 def compute_surface_distances(mask_ref, mask_pred):
     """
@@ -414,6 +445,62 @@ def compute_agatston_for_slice(X, Y, min_calc_object_pixels=3) -> int:
         slice_agatston += object_agatston
     return slice_agatston
 
+# def compute_metrics(original_file: str, reference_file: str, prediction_file: str, image_reader_writer: SimpleITKIO,
+#                     labels_or_regions: Union[List[int], List[Union[int, Tuple[int, ...]]]],
+#                     ignore_label: int = None) -> dict:
+#     # Load images
+#     # print(reference_file)
+#     seg_ref, seg_ref_dict = image_reader_writer.read_seg(reference_file)
+#     seg_pred, seg_pred_dict = image_reader_writer.read_seg(prediction_file)
+#     ori_img, _ = image_reader_writer.read_seg(original_file)
+
+#     # print(os.path.basename(reference_file),os.path.basename(prediction_file),os.path.basename(original_file),seg_ref.shape, seg_pred.shape, ori_img.shape)
+
+#     ignore_mask = seg_ref == ignore_label if ignore_label is not None else None
+
+#     results = {}
+#     results['reference_file'] = reference_file
+#     results['prediction_file'] = prediction_file
+#     results['metrics'] = {}
+
+#     for r in labels_or_regions:
+#         results['metrics'][r] = {}
+#         mask_ref = region_or_label_to_mask(seg_ref, r)
+#         mask_pred = region_or_label_to_mask(seg_pred, r)
+
+#         tp, fp, fn, tn = compute_tp_fp_fn_tn(mask_ref, mask_pred, ignore_mask)
+
+#         if tp + fp + fn == 0:
+#             results['metrics'][r]['Dice'] = np.nan
+#             results['metrics'][r]['IoU'] = np.nan
+#             results['metrics'][r]['HD95'] = np.nan
+#             results['metrics'][r]['MSD'] = np.nan
+#         else:
+#             results['metrics'][r]['Dice'] = 2 * tp / (2 * tp + fp + fn)
+#             results['metrics'][r]['IoU'] = tp / (tp + fp + fn)
+
+#             # Compute the 95% Hausdorff Distance
+#             results['metrics'][r]['HD95'] = compute_hausdorff_95(mask_ref, mask_pred)
+
+#             # Compute Mean Surface Distance (MSD)
+#             results['metrics'][r]['MSD'] = compute_mean_surface_distance(mask_ref, mask_pred)
+
+#         results['metrics'][r]['Agatston_Ref'] = sum(
+#             compute_agatston_for_slice(ori_img[0, i], mask_ref[0, i]) for i in range(seg_ref.shape[1])
+#         )
+#         results['metrics'][r]['Agatston_Pred'] = sum(
+#             compute_agatston_for_slice(ori_img[0, i], mask_pred[0, i]) for i in range(seg_pred.shape[1])
+#         )
+#         results['metrics'][r]['FP'] = fp
+#         results['metrics'][r]['TP'] = tp
+#         results['metrics'][r]['FN'] = fn
+#         results['metrics'][r]['TN'] = tn
+#         results['metrics'][r]['n_pred'] = fp + tp
+#         results['metrics'][r]['n_ref'] = fn + tp
+
+#         # print('Dice, HD95, MSD, ScoreRef, ScorePred:', results['metrics'][r]['Dice'], results['metrics'][r]['HD95'], results['metrics'][r]['MSD'], results['metrics'][r]['Agatston_Ref'],results['metrics'][r]['Agatston_Pred'])
+
+#     return results
 def compute_cl_metrics(gt_mask, pred_mask, eps=1e-8):
     gt_mask = gt_mask > 0
     pred_mask = pred_mask > 0
@@ -666,7 +753,20 @@ def convert_predicted_logits_to_segmentation_with_correct_shape(predicted_logits
 
     # revert transpose
     segmentation_reverted_cropping = segmentation_reverted_cropping.transpose(plans['transpose_backward'])
-  
+    # if return_probabilities:
+    #     # revert cropping
+    #     predicted_probabilities = label_manager.revert_cropping_on_probabilities(predicted_probabilities,
+    #                                                                              properties_dict[
+    #                                                                                  'bbox_used_for_cropping'],
+    #                                                                              properties_dict[
+    #                                                                                  'shape_before_cropping'])
+    #     predicted_probabilities = predicted_probabilities.cpu().numpy()
+    #     # revert transpose
+    #     predicted_probabilities = predicted_probabilities.transpose([0] + [i + 1 for i in
+    #                                                                        plans['transpose_backward']])
+    #     torch.set_num_threads(old_threads)
+    #     return segmentation_reverted_cropping, predicted_probabilities
+    # else:
     torch.set_num_threads(old_threads)
     return segmentation_reverted_cropping
     

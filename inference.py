@@ -34,7 +34,6 @@ from tqdm import tqdm
 from time import sleep
 import gc
 from os.path import join
-#import psutil
 
 default_num_processes = 2
 
@@ -253,7 +252,6 @@ class InferencePreprocessor(object):
         return data, seg, data_properties
     
     def predict_NCCT_from_nested_folders(self, root_folder: str, save_probabilities: bool = False):
-      
         image_file_lists = []
         output_paths = []
 
@@ -264,7 +262,7 @@ class InferencePreprocessor(object):
                     output_filename = f"CA_{file}"
                     output_path = os.path.join(subdir, output_filename)
 
-                    image_file_lists.append(input_path) 
+                    image_file_lists.append(input_path)  
                     output_paths.append(output_path)
 
         if not image_file_lists:
@@ -423,12 +421,11 @@ class InferencePreprocessor(object):
                     torch.cuda.empty_cache()
                 gc.collect()
 
-                # process = psutil.Process(os.getpid())
-                # print(f"Memory usage: {process.memory_info().rss / (1024 ** 3):.2f} GB")
 
             final_results = []
             for future in tqdm(results, desc="Exporting predictions", unit="case"):
                 final_results.append(future.get()[0])
+
         compute_gaussian.cache_clear()
         empty_cache(self.device)
 
@@ -660,6 +657,13 @@ class InferencePreprocessor(object):
         return prediction
      
     def predict_logits_from_preprocessed_data(self, data: torch.Tensor) -> torch.Tensor:
+        """
+        IMPORTANT! IF YOU ARE RUNNING THE CASCADE, THE SEGMENTATION FROM THE PREVIOUS STAGE MUST ALREADY BE STACKED ON
+        TOP OF THE IMAGE AS ONE-HOT REPRESENTATION! SEE PreprocessAdapter ON HOW THIS SHOULD BE DONE!
+
+        RETURNED LOGITS HAVE THE SHAPE OF THE INPUT. THEY MUST BE CONVERTED BACK TO THE ORIGINAL IMAGE SIZE.
+        SEE convert_predicted_logits_to_segmentation_with_correct_shape
+        """
         n_threads = torch.get_num_threads()
         torch.set_num_threads(default_num_processes if default_num_processes < n_threads else n_threads)
         prediction = None
@@ -711,14 +715,20 @@ class InferencePreprocessor(object):
         specificity_list = []
         f1_list = []
 
-        eps = 1e-8 
+        eps = 1e-8  
 
         for item in metrics['metric_per_case']:
-            m = item['metrics'][1] 
+            m = item['metrics'][1]  
 
             for k in metric_keys:
                 # print(m.get('Dice', 0))
                 val = m.get(k, 0)
+
+                if k in ['Dice', 'IoU']:
+                    val = 1.0 if val != val else val  # nan -> 1.0
+                elif k in ['HD95', 'MSD']:
+                    val = 0.0 if val != val else val  # nan -> 0.0
+
                 values[k].append(val)
 
             TP = m.get('TP', 0)
@@ -748,6 +758,8 @@ class InferencePreprocessor(object):
         stds['Recall'] = float(np.std(recall_list, ddof=1))
         stds['Specificity'] = float(np.std(specificity_list, ddof=1))
         stds['F1'] = float(np.std(f1_list, ddof=1))
+
+        
 
         return averages, stds
     

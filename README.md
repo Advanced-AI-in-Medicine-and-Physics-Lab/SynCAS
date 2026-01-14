@@ -5,8 +5,8 @@
 Official implementation of the paper:
 **"Coronary Artery Segmentation in Non-Contrast Cardiac CT using Synthetic Data-driven Anatomy-informed Contrastive Learning"**
 
- **[Paper Link (Coming Soon)]()**
- **[Pretrained Model Weights](https://drive.google.com/drive/folders/13FleJ8FCO_gZtZ-qPzGlqJHhB-HlO_u9?usp=drive_link)**
+**[Paper Link (Coming Soon)]()**
+**[Pretrained Model Weights](https://drive.google.com/drive/folders/13FleJ8FCO_gZtZ-qPzGlqJHhB-HlO_u9?usp=drive_link)**
 
 ---
 
@@ -57,6 +57,8 @@ pip install -r requirements.txt
    python inference.py
    ```
 
+    **Note:** Custom NCCT normalization is handled in `inference.py` (around **line 105**).
+
 ---
 
 ##  Synthetic Dataset Generation
@@ -70,7 +72,7 @@ Our synthetic dataset pipeline consists of three main steps:
    Use [TotalSegmentator](https://github.com/wasserth/TotalSegmentator) on ImageCAS to segment structures (e.g., myocardium, aorta, heart).
 
 3. **Generate Synthetic NCCT Volumes**
-   Run the MATLAB script (**will be released upon acceptance**):
+   Run the MATLAB script:
 
    ```matlab
    data_engine.m
@@ -80,10 +82,11 @@ Our synthetic dataset pipeline consists of three main steps:
 
 ---
 
-## Training (Related code will be released upon acceptance)
+## Training
 
 1. **Preprocess Data**
-   We follow the nnU-Net data preprocess pipeline and format, but use **custom normalization**.
+   We follow the nnU-Net data preprocess pipeline and format, but use **custom normalization**, as seen in `inference.py (line 105)`.
+
 2. **Set Configurations**
    Open `config.json` and set:
 
@@ -106,7 +109,7 @@ Our synthetic dataset pipeline consists of three main steps:
 
 * **Anatomy-informed Contrastive Learning**
 
-  See `contrastive_loss_branchAware` in `inference.py` for how voxel-level pseudo-negatives are generated using anatomical priors.
+  See `contrastive_loss_branchAware` in `training.py` for how voxel-level pseudo-negatives are generated using anatomical priors.
 ---
 
 ##  Citation
@@ -125,8 +128,8 @@ If this work helps your research, please cite:
 ---
 
 ##  Resources
-*  [nnUNet](https://github.com/MIC-DKFZ/nnUNet)
-*  [TotalSegmentator](https://github.com/wasserth/TotalSegmentator)
-*  [ImageCAS Dataset](https://github.com/XiaoweiXu/ImageCAS-A-Large-Scale-Dataset-and-Benchmark-for-Coronary-Artery-Segmentation-based-on-CT)
+* [nnUNet](https://github.com/MIC-DKFZ/nnUNet)
+* [TotalSegmentator](https://github.com/wasserth/TotalSegmentator)
+* [ImageCAS Dataset](https://github.com/XiaoweiXu/ImageCAS-A-Large-Scale-Dataset-and-Benchmark-for-Coronary-Artery-Segmentation-based-on-CT)
 
 ---
