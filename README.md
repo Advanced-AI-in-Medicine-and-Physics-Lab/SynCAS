@@ -5,7 +5,7 @@
 Official implementation of the paper:
 **"Coronary Artery Segmentation in Non-Contrast Cardiac CT using Synthetic Data-driven Anatomy-informed Contrastive Learning"**
 
-**[Paper Link (Coming Soon)]()**
+**[Paper Link](https://iopscience.iop.org/article/10.1088/1361-6560/ae387c)**
 **[Pretrained Model Weights](https://drive.google.com/drive/folders/13FleJ8FCO_gZtZ-qPzGlqJHhB-HlO_u9?usp=drive_link)**
 
 ---
