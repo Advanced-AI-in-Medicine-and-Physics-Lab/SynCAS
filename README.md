@@ -117,11 +117,11 @@ Our synthetic dataset pipeline consists of three main steps:
 If this work helps your research, please cite:
 
 ```bibtex
-@article{SynCASPaper2025,
-  title={Coronary Artery Segmentation in Non-Contrast Cardiac CT using Synthetic Data-driven Anatomy-informed Contrastive Learning},
-  author={Jinkui Hao, et al.},
-  journal={TBD},
-  year={2025}
+@article{SynCAS2026,
+	author={Hao, Jinkui and He, Xiaoyi and Durak, Gorkem and Aktas, Halil Ertugrul and Bagci, Ulas and Shah, Nilay S and Zhou, Bo},
+	title={Coronary artery segmentation in non-contrast cardiac CT using anatomy-informed contrastive learning and synthetic data},
+	journal={Physics in Medicine & Biology},
+	year={2026},
 }
 ```
 
