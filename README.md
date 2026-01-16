@@ -3,7 +3,7 @@
 # SynCAS: Synthetic-data-driven Coronary Artery Segmentation
 
 Official implementation of the paper:
-**"Coronary Artery Segmentation in Non-Contrast Cardiac CT using Synthetic Data-driven Anatomy-informed Contrastive Learning"**
+**"Coronary artery segmentation in non-contrast cardiac CT using anatomy-informed contrastive learning and synthetic data"**
 
 | **[Paper Link](https://iopscience.iop.org/article/10.1088/1361-6560/ae387c)** |
  **[Model Weights](https://drive.google.com/drive/folders/13FleJ8FCO_gZtZ-qPzGlqJHhB-HlO_u9?usp=drive_link)** |
