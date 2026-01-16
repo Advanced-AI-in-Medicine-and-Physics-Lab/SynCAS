@@ -128,8 +128,8 @@ If this work helps your research, please cite:
 ---
 
 ##  Resources
-* [nnUNet](https://github.com/MIC-DKFZ/nnUNet)
 * [TotalSegmentator](https://github.com/wasserth/TotalSegmentator)
 * [ImageCAS Dataset](https://github.com/XiaoweiXu/ImageCAS-A-Large-Scale-Dataset-and-Benchmark-for-Coronary-Artery-Segmentation-based-on-CT)
+* [nnUNet](https://github.com/MIC-DKFZ/nnUNet)
 
 ---
