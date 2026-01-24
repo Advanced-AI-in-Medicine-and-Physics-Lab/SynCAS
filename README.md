@@ -21,7 +21,7 @@ SynCAS/
 ├── data_engine.m          # MATLAB-based synthetic data generator
 ├── inference.py           # Inference script (includes normalization)
 ├── predictor.py           # Model prediction wrapper
-├── sampling.py            # Sampling and contrastive learning utils
+├── sampling.py            # Sampling utils
 ├── training.py            # Model training script
 ├── LICENSE
 └── README.md              # This file
